@@ -222,7 +222,7 @@ class OrderProcessor:
             "com_distance_m": period.com_distance_m,
             "part_masses_g": {k: round(v, 2) for k, v in masses.items()},
             "registered_use_g": registered,
-            "files": [str(f.relative_to(self.output_dir)) for f in files] + [f"{order.order_id}/design.json"],
+               "files": [f.relative_to(self.output_dir).as_posix() for f in files] + [f"{order.order_id}/design.json"],
         }
         (out / "report.json").write_text(json.dumps({"order": order.to_dict() | {"result": result}}, indent=2))
         result["files"].append(f"{order.order_id}/report.json")
