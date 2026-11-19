@@ -1,0 +1,9 @@
+{
+  "_note": "PLACEHOLDER DATA. Replace with the filament types and colours actually loaded in the UiA makerspace, and the density from each manufacturer's datasheet (cite the datasheets in the report). net_weight_g = net weight on the spool label.",
+  "filaments": [
+    {"vendor": "Prusament", "name": "PLA Galaxy Black", "material": "PLA", "density": 1.24, "diameter": 1.75, "color_hex": "1E1E2A", "net_weight_g": 1000, "spool_weight_g": 201},
+    {"vendor": "Prusament", "name": "PLA Prusa Orange", "material": "PLA", "density": 1.24, "diameter": 1.75, "color_hex": "FA6831", "net_weight_g": 1000, "spool_weight_g": 201},
+    {"vendor": "Prusament", "name": "PETG Signal White", "material": "PETG", "density": 1.27, "diameter": 1.75, "color_hex": "F0F0F0", "net_weight_g": 1000, "spool_weight_g": 201},
+    {"vendor": "Prusament", "name": "PETG Ultramarine Blue", "material": "PETG", "density": 1.27, "diameter": 1.75, "color_hex": "1F3FA0", "net_weight_g": 1000, "spool_weight_g": 201}
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "_note": "Factory-wide settings. CHECK printer.build_volume_mm against the poster in the UiA makerspace and fix the values.",
+  "spoolman_url": "http://localhost:7912",
+  "spoolman_timeout_s": 5,
+  "printer": {
+    "name": "REPLACE: makerspace printer model",
+    "build_volume_mm": [250, 210, 210]
+  },
+  "print_settings": {
+    "infill": 0.20,
+    "wall_thickness_mm": 0.9,
+    "top_bottom_thickness_mm": 0.8
+  },
+  "limits": {
+    "min_clearance_mm": 5.0,
+    "min_wall_mm": 2.0,
+    "axle_hole_clearance_mm": 0.3,
+    "side_clearance_mm": 1.0
+  },
+  "material_safety_factor": 1.10,
+  "period_tolerance_s": 0.02,
+  "max_parallel_orders": 4,
+  "geometry_template": {
+    "base_length": 120.0,
+    "base_width": 80.0,
+    "base_thickness": 6.0,
+    "stand_height": 180.0,
+    "stand_width": 15.0,
+    "stand_thickness": 6.0,
+    "stand_gap": 30.0,
+    "stand_hole_offset": 12.0,
+    "axle_diameter": 5.0,
+    "axle_length": 50.0,
+    "arm_length": 120.0,
+    "arm_width": 10.0,
+    "arm_thickness": 5.0,
+    "hub_diameter": 14.0,
+    "hub_length": 20.0,
+    "weight_width": 25.0,
+    "weight_height": 20.0,
+    "weight_depth": 20.0,
+    "weight_position": 100.0
+  }
+}

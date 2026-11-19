@@ -1,0 +1,19 @@
+# AI-GENERATED (Claude Opus 5.5, 2026-11-19). See AI_USE_LOG.md.
+#
+# Spoolman material stock for the pendulum factory.
+# The image tag is pinned on purpose (project brief, section 5.1): the project must
+# run the same way during assessment. Do NOT change it to "latest".
+#
+# Start:   docker compose up -d
+# Check:   http://localhost:7912/api/v1/health   and   http://localhost:7912/api/v1/docs
+# Stop:    docker compose down          (data is kept in ./spoolman_data)
+services:
+  spoolman:
+    image: ghcr.io/donkie/spoolman:0.27.1
+    restart: unless-stopped
+    volumes:
+      - ./spoolman_data:/home/app/.local/share/spoolman
+    ports:
+      - "7912:8000"
+    environment:
+      - TZ=Europe/Oslo
