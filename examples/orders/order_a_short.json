@@ -1,0 +1,2 @@
+{"customer": "Example A", "target_period_s": 0.6, "max_height_mm": 200, "max_footprint_mm": 150, "axle_diameter_mm": 5.0,
+ "spool_ids": {"base": 1, "stand": 1, "arm": 2, "weight": 3, "axle": 4}}

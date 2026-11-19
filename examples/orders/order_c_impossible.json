@@ -1,0 +1,2 @@
+{"customer": "Example C (should be rejected: too long period for the printer)", "target_period_s": 2.0, "max_height_mm": 220, "max_footprint_mm": 150, "axle_diameter_mm": 5.0,
+ "spool_ids": {"base": 1, "stand": 1, "arm": 1, "weight": 1, "axle": 1}}
