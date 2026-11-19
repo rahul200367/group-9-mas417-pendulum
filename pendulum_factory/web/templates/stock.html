@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{# AI-GENERATED (Claude Opus 5.5, 2026-11-19). See AI_USE_LOG.md. #}
+{% block content %}
+<h1>Material stock (Spoolman)</h1>
+{% if error %}<div class="flash error">{{ error }}</div>{% endif %}
+<table>
+  <tr><th></th><th>Spool</th><th>Filament</th><th>Material</th><th>Density</th><th>Initial</th><th>Used</th><th>Remaining</th></tr>
+  {% for s in spools %}
+  <tr><td><span class="swatch" style="background:#{{ s.filament.color_hex or '888888' }}"></span></td>
+      <td>#{{ s.id }}</td>
+      <td>{{ (s.filament.vendor or {}).name }} {{ s.filament.name }}</td>
+      <td>{{ s.filament.material }}</td><td>{{ s.filament.density }} g/cm³</td>
+      <td>{{ "%.0f"|format(s.initial_weight or 0) }} g</td>
+      <td>{{ "%.1f"|format(s.used_weight or 0) }} g</td>
+      <td>{{ "%.1f"|format(s.remaining_weight or 0) }} g</td></tr>
+  {% else %}
+  <tr><td colspan="8">No spools. Run <code>python scripts/seed_stock.py</code>.</td></tr>
+  {% endfor %}
+</table>
+<p><small>Spoolman's own interface: <a href="http://localhost:7912">http://localhost:7912</a></small></p>
+{% endblock %}

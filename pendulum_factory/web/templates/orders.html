@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{# AI-GENERATED (Claude Opus 5.5, 2026-11-19). See AI_USE_LOG.md. #}
+{% block content %}
+<h1>Orders</h1>
+<form method="post" action="{{ url_for('start_production') }}">
+  <button type="submit" {% if busy %}disabled{% endif %}>
+    {% if busy %}Production running…{% else %}Start production (pending + postponed orders){% endif %}
+  </button>
+</form>
+<table>
+  <tr><th>Order</th><th>Customer</th><th>Period</th><th>Status</th><th>Result</th></tr>
+  {% for o in orders %}
+  <tr>
+    <td>{{ o.order_id }}<br><small>{{ o.created_at }}</small></td>
+    <td>{{ o.customer }}</td>
+    <td>{{ o.target_period_s }} s</td>
+    <td class="status-{{ o.status }}">{{ o.status }}</td>
+    <td>{{ o.message }}
+      {% if o.status == 'done' %}
+        <br><small>simulated {{ o.result.simulated_period_s }} s ·
+        total {{ "%.1f"|format(o.result.part_masses_g.values()|sum) }} g</small>
+        {% for f in o.result.files %}
+          <br><a href="{{ url_for('files', order_id=o.order_id, filename=f.split('/', 1)[1]) }}">{{ f.split('/', 1)[1] }}</a>
+        {% endfor %}
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">No orders yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

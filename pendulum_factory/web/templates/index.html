@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{# AI-GENERATED (Claude Opus 5.5, 2026-11-19). See AI_USE_LOG.md. #}
+{% block content %}
+<h1>Order a pendulum kit</h1>
+{% if error %}
+  <div class="flash error">Cannot take orders right now: {{ error }}</div>
+{% else %}
+<form method="post" action="{{ url_for('place_order') }}">
+  <label>Your name <input name="customer" required></label>
+  <label>Swing period (s) <input name="target_period_s" type="number" step="0.01" min="0.1" max="5" value="0.80" required></label>
+  <label>Largest allowed height (mm) <input name="max_height_mm" type="number" step="1" value="200" required></label>
+  <label>Largest allowed base side (mm) <input name="max_footprint_mm" type="number" step="1" value="150" required></label>
+  <label>Axle diameter (mm) <input name="axle_diameter_mm" type="number" step="0.1" min="2" max="12" value="{{ defaults.geometry_template.axle_diameter }}" required></label>
+  <label>Infill (0-1, empty = {{ defaults.print_settings.infill }}) <input name="infill" type="number" step="0.05" min="0" max="1"></label>
+
+  <h2>Filament for each part</h2>
+  <table>
+    <tr><th>Part</th><th>Filament</th></tr>
+    {% for part in parts %}
+    <tr><td>{{ part }}</td><td>
+      <select name="spool_{{ part }}" required>
+        {% for f in filaments %}
+        <option value="{{ f.spool_id }}">{{ f.vendor }} {{ f.name }} ({{ f.material }}, {{ f.density }} g/cm³, {{ "%.0f"|format(f.remaining_weight) }} g left)</option>
+        {% endfor %}
+      </select></td></tr>
+    {% endfor %}
+  </table>
+
+  <h3>Available filaments</h3>
+  <table>
+    <tr><th></th><th>Spool</th><th>Filament</th><th>Material</th><th>Density</th><th>Diameter</th><th>Remaining</th></tr>
+    {% for f in filaments %}
+    <tr><td><span class="swatch" style="background:#{{ f.color_hex }}"></span></td>
+        <td>#{{ f.spool_id }}</td><td>{{ f.vendor }} {{ f.name }}</td><td>{{ f.material }}</td>
+        <td>{{ f.density }} g/cm³</td><td>{{ f.diameter }} mm</td><td>{{ "%.0f"|format(f.remaining_weight) }} g</td></tr>
+    {% endfor %}
+  </table>
+  <button type="submit">Place order</button>
+</form>
+{% endif %}
+{% endblock %}
