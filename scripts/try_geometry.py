@@ -40,3 +40,12 @@ for target in (0.5, 0.6, 0.8, 1.2):
               "| stand", round(g.stand_height, 1))
     except Exception as e:
         print(target, "s -> REJECTED:", e)
+from pendulum_factory import simulation
+solved = physics.solve_geometry(replace(design, target_period_s=0.6))
+sparts = geometry.build_parts(solved)
+smasses = {n: physics.part_mass_g(solved, n, p) for n, p in sparts.items()}
+calc = physics.period(solved, smasses).period_s
+for angle in (5, 20, 45, 90):
+    sim = simulation.simulate(solved, smasses, angle).period_s
+    print(f"{angle:>3} deg: formula {calc:.4f} s, simulation {sim:.4f} s, difference {(sim/calc-1)*100:+.2f} %")
+    

@@ -1,30 +1,61 @@
-"""Simulation of the pendulum motion (MuJoCo).
-
-STUDENT-WRITTEN MODULE. The function signature and this docstring were provided
-by AI (Claude) as an interface; the implementation must be your own work.
-
-simulate(design, masses_g, initial_angle_deg, duration_s) -> SimulationResult
-
-  * Build an MJCF model string from design.geometry: one body with a hinge joint
-    about the y axis at the pivot.
-  * Give the body the SAME mass and inertia as physics.period() computes
-    (an <inertial> element), otherwise simulation and calculation are not comparable.
-  * mujoco.MjModel.from_xml_string(xml); step with mujoco.mj_step; record the angle.
-  * Measure the period from the recorded angles, e.g. the average time between
-    zero crossings in the same direction (NumPy).
-  * Compare small (5 deg) and large (45 deg) start angles -> shows where
-    T = 2*pi*sqrt(I/(m g d)) stops being accurate. Good material for the report.
-
-The brief also asks you to compare at least two design variants (arm length,
-weight size, filament, infill). Do that in a small script under scripts/ that calls
-this function and plots angle vs time for each variant.
-"""
+"""Simulation of the pendulum motion (MuJoCo). AI-assisted (Claude), see AI_USE_LOG.md."""
 from __future__ import annotations
+
+import math
+
+import mujoco
+import numpy as np
 
 from .engine import SimulationResult
 from .params import Design
 
 
+def build_model(design: Design, masses_g: dict[str, float]) -> mujoco.MjModel:
+    """One rigid body on a hinge, with the SAME mass, inertia and centre of mass as physics.period()."""
+    from . import physics
+    p = physics.period(design, masses_g)
+    m = p.moving_mass_kg
+    d = p.com_distance_m
+    I_cm = p.moment_of_inertia_kg_m2 - m * d**2      # parallel axis theorem, backwards
+
+    xml = f"""
+    <mujoco>
+      <option timestep="0.0005" gravity="0 0 -9.81"/>
+      <worldbody>
+        <body name="pendulum" pos="0 0 0">
+          <joint name="hinge" type="hinge" axis="0 1 0" damping="0"/>
+          <inertial pos="0 0 {-d}" mass="{m}" diaginertia="{I_cm} {I_cm} {I_cm}"/>
+        </body>
+      </worldbody>
+    </mujoco>"""
+    return mujoco.MjModel.from_xml_string(xml)
+
+
+def measure_period(times: np.ndarray, angles: np.ndarray) -> float:
+    """Average time between upward zero crossings (angle goes from - to +)."""
+    crossings = []
+    for i in range(1, len(angles)):
+        if angles[i - 1] < 0 <= angles[i]:
+            frac = -angles[i - 1] / (angles[i] - angles[i - 1])   # linear interpolation
+            crossings.append(times[i - 1] + frac * (times[i] - times[i - 1]))
+    if len(crossings) < 2:
+        raise ValueError("Simulation too short to measure a period")
+    return float(np.mean(np.diff(crossings)))
+
+
 def simulate(design: Design, masses_g: dict[str, float],
              initial_angle_deg: float = 5.0, duration_s: float = 20.0) -> SimulationResult:
-    raise NotImplementedError("TODO (student): MuJoCo simulation of the pendulum")
+    model = build_model(design, masses_g)
+    data = mujoco.MjData(model)
+    data.qpos[0] = math.radians(initial_angle_deg)
+
+    steps = int(duration_s / model.opt.timestep)
+    times = np.zeros(steps)
+    angles = np.zeros(steps)
+    for i in range(steps):
+        mujoco.mj_step(model, data)
+        times[i] = data.time
+        angles[i] = data.qpos[0]
+
+    return SimulationResult(period_s=measure_period(times, angles), times_s=times,
+                            angles_rad=angles, initial_angle_deg=initial_angle_deg)
