@@ -38,8 +38,20 @@ G = 9.81  # m/s^2
 
 
 def part_mass_g(design: Design, part_name: str, shape: Any) -> float:
-    raise NotImplementedError("TODO (student): mass of one printed part")
+    from .export import to_shape
+    solid = to_shape(shape)                       # Workplane -> Shape
 
+    V = solid.Volume()                            # mm^3
+    A = solid.Area()                              # mm^2
+    wall = design.print_settings.wall_thickness_mm
+    infill = design.print_settings.infill
+    rho = design.filaments[filament_key(part_name)].density / 1000   # g/cm^3 -> g/mm^3
+
+    V_shell = min(V, A * wall)                    # thin parts can be all shell
+
+    # TODO: write the mass formula from above, using V, V_shell, infill and rho
+    mass = rho * (V_shell + infill * (V - V_shell))
+    return mass
 
 def period(design: Design, masses_g: dict[str, float]) -> PeriodResult:
     raise NotImplementedError("TODO (student): physical pendulum period")

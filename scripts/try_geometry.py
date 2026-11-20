@@ -22,3 +22,6 @@ show(stand)
 from pendulum_factory.export import export_kit
 files = export_kit(parts, Path("output/try"), "TRY", config.build_volume_mm)
 print("kit written to:", files)
+from pendulum_factory import physics
+for name, part in parts.items():
+    print(name, round(physics.part_mass_g(design, name, part), 2), "g")
