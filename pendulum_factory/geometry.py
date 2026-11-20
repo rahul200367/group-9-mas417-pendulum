@@ -58,8 +58,21 @@ def _axle(design: Design) -> cq.Workplane:
     g = design.geometry
     axle = cq.Workplane("XY").circle(g.axle_diameter / 2).extrude(g.axle_length)
     return axle
+def _arm(design: Design) -> cq.Workplane:
+    g = design.geometry
+    lim = design.limits
+    hole_d = g.axle_diameter + lim.axle_hole_clearance_mm
 
+    # bar from the pivot (x = 0) to the end of the arm
+    bar = cq.Workplane("XY").box(g.arm_length, g.arm_width, g.arm_thickness,
+                                 centered=(False, True, False))
+    # round hub around the pivot, taller than the bar
+    hub = cq.Workplane("XY").circle(g.hub_diameter / 2).extrude(g.hub_length)
+
+    arm = bar.union(hub)                                # glue them into one solid
+    arm = arm.faces(">Z").workplane().hole(hole_d)      # axle hole through the hub
+    return arm
 
 def build_parts(design: Design) -> dict[str, cq.Workplane]:
     stand = _stand(design)
-    return {"stand_left": stand, "stand_right": stand, "base": _base(design), "axle": _axle(design)}
+    return {"stand_left": stand, "stand_right": stand, "base": _base(design), "axle": _axle(design),"arm":_arm(design)}

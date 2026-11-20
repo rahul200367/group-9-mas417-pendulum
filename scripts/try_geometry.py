@@ -12,7 +12,7 @@ design = Design("TEST", 0.8, config.geometry_template, config.print_settings,
                 {p: fil for p in ("base", "stand", "arm", "weight", "axle")}, config.limits)
 
 parts = geometry.build_parts(design)
-stand = parts["axle"]
+stand = parts["arm"]
 
 bb = stand.val().BoundingBox()
 print("size x, y, z:", round(bb.xlen, 2), round(bb.ylen, 2), round(bb.zlen, 2), " zmin:", round(bb.zmin, 2))
