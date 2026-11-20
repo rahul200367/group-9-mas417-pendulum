@@ -1,0 +1,45 @@
+{
+  "order": {
+    "order_id": "ORD-20261120-165323-8bba",
+    "customer": "Test A",
+    "target_period_s": 0.6,
+    "max_height_mm": 250.0,
+    "max_footprint_mm": 150.0,
+    "axle_diameter_mm": 5.0,
+    "spool_ids": {
+      "base": 1,
+      "stand": 1,
+      "arm": 1,
+      "weight": 1,
+      "axle": 1
+    },
+    "infill": null,
+    "status": "processing",
+    "message": "",
+    "created_at": "2026-11-20T11:23:23+00:00",
+    "result": {
+      "requested_period_s": 0.6,
+      "calculated_period_s": 0.6003,
+      "simulated_period_s": 0.6005,
+      "period_difference_s": 0.0003,
+      "moment_of_inertia_kg_m2": 7.597164029472626e-05,
+      "moving_mass_kg": 0.01124703871096514,
+      "com_distance_m": 0.07544530976136671,
+      "part_masses_g": {
+        "base": 33.57,
+        "stand_left": 7.84,
+        "stand_right": 7.84,
+        "arm": 6.08,
+        "weight": 5.17,
+        "axle": 0.98
+      },
+      "registered_use_g": {
+        "1": 67.62
+      },
+      "files": [
+        "ORD-20261120-165323-8bba/ORD-20261120-165323-8bba_kit.3mf",
+        "ORD-20261120-165323-8bba/design.json"
+      ]
+    }
+  }
+}

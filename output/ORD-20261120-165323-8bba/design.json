@@ -1,0 +1,93 @@
+{
+  "order_id": "ORD-20261120-165323-8bba",
+  "target_period_s": 0.6,
+  "geometry": {
+    "base_length": 120.0,
+    "base_width": 80.0,
+    "base_thickness": 6.0,
+    "stand_height": 128.0501188934528,
+    "stand_width": 15.0,
+    "stand_thickness": 6.0,
+    "stand_gap": 30.0,
+    "stand_hole_offset": 12.0,
+    "axle_diameter": 5.0,
+    "axle_length": 50.0,
+    "arm_length": 110.9375,
+    "arm_width": 10.0,
+    "arm_thickness": 5.0,
+    "hub_diameter": 14.0,
+    "hub_length": 20.0,
+    "weight_width": 25.0,
+    "weight_height": 20.0,
+    "weight_depth": 20.0,
+    "weight_position": 98.9375
+  },
+  "print_settings": {
+    "infill": 0.2,
+    "wall_thickness_mm": 0.9,
+    "top_bottom_thickness_mm": 0.8
+  },
+  "filaments": {
+    "base": {
+      "spool_id": 1,
+      "filament_id": 1,
+      "name": "PLA Galaxy Black",
+      "material": "PLA",
+      "vendor": "Prusament",
+      "density": 1.24,
+      "diameter": 1.75,
+      "color_hex": "1E1E2A",
+      "remaining_weight": 1000.0
+    },
+    "stand": {
+      "spool_id": 1,
+      "filament_id": 1,
+      "name": "PLA Galaxy Black",
+      "material": "PLA",
+      "vendor": "Prusament",
+      "density": 1.24,
+      "diameter": 1.75,
+      "color_hex": "1E1E2A",
+      "remaining_weight": 1000.0
+    },
+    "arm": {
+      "spool_id": 1,
+      "filament_id": 1,
+      "name": "PLA Galaxy Black",
+      "material": "PLA",
+      "vendor": "Prusament",
+      "density": 1.24,
+      "diameter": 1.75,
+      "color_hex": "1E1E2A",
+      "remaining_weight": 1000.0
+    },
+    "weight": {
+      "spool_id": 1,
+      "filament_id": 1,
+      "name": "PLA Galaxy Black",
+      "material": "PLA",
+      "vendor": "Prusament",
+      "density": 1.24,
+      "diameter": 1.75,
+      "color_hex": "1E1E2A",
+      "remaining_weight": 1000.0
+    },
+    "axle": {
+      "spool_id": 1,
+      "filament_id": 1,
+      "name": "PLA Galaxy Black",
+      "material": "PLA",
+      "vendor": "Prusament",
+      "density": 1.24,
+      "diameter": 1.75,
+      "color_hex": "1E1E2A",
+      "remaining_weight": 1000.0
+    }
+  },
+  "limits": {
+    "min_clearance_mm": 5.0,
+    "min_wall_mm": 2.0,
+    "axle_hole_clearance_mm": 0.3,
+    "side_clearance_mm": 1.0
+  }
+}
