@@ -12,10 +12,13 @@ design = Design("TEST", 0.8, config.geometry_template, config.print_settings,
                 {p: fil for p in ("base", "stand", "arm", "weight", "axle")}, config.limits)
 
 parts = geometry.build_parts(design)
-stand = parts["arm"]
+stand = parts["weight"]
 
 bb = stand.val().BoundingBox()
 print("size x, y, z:", round(bb.xlen, 2), round(bb.ylen, 2), round(bb.zlen, 2), " zmin:", round(bb.zmin, 2))
 print("volume mm^3:", round(stand.val().Volume(), 1))
 
 show(stand)
+from pendulum_factory.export import export_kit
+files = export_kit(parts, Path("output/try"), "TRY", config.build_volume_mm)
+print("kit written to:", files)

@@ -72,7 +72,17 @@ def _arm(design: Design) -> cq.Workplane:
     arm = bar.union(hub)                                # glue them into one solid
     arm = arm.faces(">Z").workplane().hole(hole_d)      # axle hole through the hub
     return arm
+def _weight(design: Design) -> cq.Workplane:
+    g = design.geometry
+    lim = design.limits
+    slot_w = g.arm_width + lim.axle_hole_clearance_mm      # slot fits the arm + clearance
+    slot_t = g.arm_thickness + lim.axle_hole_clearance_mm
+
+    weight = cq.Workplane("XY").box(g.weight_width, g.weight_depth, g.weight_height,
+                                    centered=(True, True, False))
+    weight = weight.faces(">Z").workplane().rect(slot_w, slot_t).cutThruAll()
+    return weight
 
 def build_parts(design: Design) -> dict[str, cq.Workplane]:
     stand = _stand(design)
-    return {"stand_left": stand, "stand_right": stand, "base": _base(design), "axle": _axle(design),"arm":_arm(design)}
+    return {"stand_left": stand, "stand_right": stand, "base": _base(design), "axle": _axle(design),"arm":_arm(design), "weight":_weight(design)}
