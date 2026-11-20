@@ -54,8 +54,12 @@ def _base(design: Design) -> cq.Workplane:
     base = cq.Workplane("XY").box(g.base_length, g.base_width, g.base_thickness,
                                   centered=(True, True, False))
     return base
+def _axle(design: Design) -> cq.Workplane:
+    g = design.geometry
+    axle = cq.Workplane("XY").circle(g.axle_diameter / 2).extrude(g.axle_length)
+    return axle
 
 
 def build_parts(design: Design) -> dict[str, cq.Workplane]:
     stand = _stand(design)
-    return {"stand_left": stand, "stand_right": stand, "base": _base(design)}
+    return {"stand_left": stand, "stand_right": stand, "base": _base(design), "axle": _axle(design)}
