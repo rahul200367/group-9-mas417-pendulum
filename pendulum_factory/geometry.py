@@ -30,6 +30,25 @@ import cadquery as cq
 from .params import Design
 
 
-def build_parts(design: Design) -> dict[str, cq.Workplane]:
+def _stand(design: Design) -> cq.Workplane:
     g = design.geometry
-    raise NotImplementedError("TODO (student): build the 6 kit parts from design.geometry")
+    lim = design.limits
+
+    # hole slightly bigger than the axle, so the axle can turn
+    hole_d = g.axle_diameter + lim.axle_hole_clearance_mm
+
+    # hole centre: stand_hole_offset back from the far end of the plate
+    hole_x = g.stand_height - g.stand_hole_offset
+
+    # flat plate: length along x, width along y, thickness along z
+    stand = cq.Workplane("XY").box(g.stand_height, g.stand_width, g.stand_thickness,
+                                   centered=(False, True, False))
+    stand = stand.faces(">Z").workplane()   # start drawing on the top face
+    stand = stand.center(hole_x, 0)         # move to the hole position
+    stand = stand.hole(hole_d)              # drill through the whole plate
+    return stand
+
+
+def build_parts(design: Design) -> dict[str, cq.Workplane]:
+    stand = _stand(design)
+    return {"stand_left": stand, "stand_right": stand}
