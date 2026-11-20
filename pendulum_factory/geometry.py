@@ -49,6 +49,13 @@ def _stand(design: Design) -> cq.Workplane:
     return stand
 
 
+def _base(design: Design) -> cq.Workplane:
+    g = design.geometry
+    base = cq.Workplane("XY").box(g.base_length, g.base_width, g.base_thickness,
+                                  centered=(True, True, False))
+    return base
+
+
 def build_parts(design: Design) -> dict[str, cq.Workplane]:
     stand = _stand(design)
-    return {"stand_left": stand, "stand_right": stand}
+    return {"stand_left": stand, "stand_right": stand, "base": _base(design)}
