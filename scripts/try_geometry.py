@@ -25,3 +25,8 @@ print("kit written to:", files)
 from pendulum_factory import physics
 for name, part in parts.items():
     print(name, round(physics.part_mass_g(design, name, part), 2), "g")
+
+masses = {name: physics.part_mass_g(design, name, part) for name, part in parts.items()}
+result = physics.period(design, masses)
+print("period:", round(result.period_s, 3), "s")
+print("I:", result.moment_of_inertia_kg_m2, " m:", result.moving_mass_kg, " d:", result.com_distance_m)
