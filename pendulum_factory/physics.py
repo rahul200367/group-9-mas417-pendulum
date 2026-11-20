@@ -78,5 +78,52 @@ def period(design: Design, masses_g: dict[str, float]) -> PeriodResult:
     return PeriodResult(period_s=T, moment_of_inertia_kg_m2=I, moving_mass_kg=m, com_distance_m=d)
 
 
+END_MARGIN_MM = 2.0     # arm sticks out this much below the weight
+MAX_ARM_MM = 400.0      # search limit; the printer check rejects too-long parts later
+TOLERANCE_S = 0.001     # stop when the period is this close
+
+
+def design_for_position(design: Design, s: float) -> Design:
+    """Kit with the weight centre at s mm below the pivot, weight at the end of the arm.
+    The stands are made just tall enough for the pendulum to swing freely."""
+    g = design.geometry
+    arm_length = s + g.weight_height / 2 + END_MARGIN_MM
+    new = design.with_geometry(weight_position=s, arm_length=arm_length)
+    stand_height = new.geometry.sweep_radius + g.stand_hole_offset + design.limits.min_clearance_mm
+    return new.with_geometry(stand_height=stand_height)
+
+
+def period_for(design: Design) -> float:
+    from . import geometry
+    parts = {"arm": geometry._arm(design), "weight": geometry._weight(design)}
+    masses = {name: part_mass_g(design, name, part) for name, part in parts.items()}
+    return period(design, masses).period_s
+
+
 def solve_geometry(design: Design) -> Design:
-    raise NotImplementedError("TODO (student): inverse solver for the requested period")
+    target = design.target_period_s
+    g = design.geometry
+
+    # shortest and longest possible weight positions
+    s_low = g.hub_diameter / 2 + g.weight_height / 2 + 1.0
+    s_high = MAX_ARM_MM - g.weight_height / 2 - END_MARGIN_MM
+
+    T_low = period_for(design_for_position(design, s_low))
+    T_high = period_for(design_for_position(design, s_high))
+    if not T_low <= target <= T_high:
+        raise OrderRejected(
+            f"A period of {target:.3f} s is not possible with this kit: "
+            f"it can swing between {T_low:.3f} s and {T_high:.3f} s."
+        )
+
+    # bisection: the period grows when the weight moves down the arm
+    for _ in range(60):
+        s_mid = (s_low + s_high) / 2
+        T_mid = period_for(design_for_position(design, s_mid))
+        if abs(T_mid - target) < TOLERANCE_S:
+            break
+        if T_mid < target:
+            s_low = s_mid
+        else:
+            s_high = s_mid
+    return design_for_position(design, s_mid)

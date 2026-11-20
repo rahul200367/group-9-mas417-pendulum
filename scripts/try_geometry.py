@@ -30,3 +30,13 @@ masses = {name: physics.part_mass_g(design, name, part) for name, part in parts.
 result = physics.period(design, masses)
 print("period:", round(result.period_s, 3), "s")
 print("I:", result.moment_of_inertia_kg_m2, " m:", result.moving_mass_kg, " d:", result.com_distance_m)
+from dataclasses import replace
+for target in (0.5, 0.6, 0.8, 1.2):
+    try:
+        solved = physics.solve_geometry(replace(design, target_period_s=target))
+        g = solved.geometry
+        print(target, "s -> period", round(physics.period_for(solved), 4),
+              "| arm", round(g.arm_length, 1), "| weight at", round(g.weight_position, 1),
+              "| stand", round(g.stand_height, 1))
+    except Exception as e:
+        print(target, "s -> REJECTED:", e)
